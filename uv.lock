@@ -561,7 +561,7 @@ wheels = [
 
 [[package]]
 name = "langchain-mcp-tools"
-version = "0.0.7"
+version = "0.0.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema-pydantic" },
@@ -576,9 +576,9 @@ dependencies = [
     { name = "pympler" },
     { name = "python-dotenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/bc/07071da55c56ad24f51e21dac85dc620b1b47af7cb37a6b301cf205d9bdd/langchain_mcp_tools-0.0.7.tar.gz", hash = "sha256:353a020edf2d73a1edf47e0d21e668ff6b30dbb5ed7b3473ebf8a13790d24ca4", size = 8469 }
+sdist = { url = "https://files.pythonhosted.org/packages/90/82/efae74b9369d0a4e2a230311fcdf65100f33d22cdbb3ac4c4f28e94d29f2/langchain_mcp_tools-0.0.8.tar.gz", hash = "sha256:c3e24870a87b1b126a2b2aba715f4a5d549b5f8fc7d52addf736bdc6e971b278", size = 8508 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a4/6c/dac8a03e0851f995e501a9c2448ca3929f8c6f9949ee12ede017f3239c76/langchain_mcp_tools-0.0.7-py3-none-any.whl", hash = "sha256:b62cac20d5f8fa0d8c84476e33d224f0cba8364de85f59a96145a59c8a576bac", size = 8598 },
+    { url = "https://files.pythonhosted.org/packages/a0/e7/e0f4070857f59ee7857f3f5f3a99e9fc1e5406bdf71c848387af5d5690dd/langchain_mcp_tools-0.0.8-py3-none-any.whl", hash = "sha256:9a99bda7d761af8ac5dec0c0a508e230059ffb75e98a9a1dcfd5a6c7ea17115f", size = 8771 },
 ]
 
 [[package]]
@@ -684,20 +684,14 @@ wheels = [
 
 [[package]]
 name = "mcp-client-langchain-py"
-version = "0.0.7"
+version = "0.0.8"
 source = { virtual = "." }
 dependencies = [
-    { name = "jsonschema-pydantic" },
     { name = "langchain" },
     { name = "langchain-anthropic" },
-    { name = "langchain-groq" },
     { name = "langchain-mcp-tools" },
     { name = "langchain-openai" },
     { name = "langgraph" },
-    { name = "mcp" },
-    { name = "pyjson5" },
-    { name = "pympler" },
-    { name = "python-dotenv" },
 ]
 
 [package.dev-dependencies]
@@ -708,17 +702,11 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "jsonschema-pydantic", specifier = ">=0.6" },
     { name = "langchain", specifier = ">=0.3.14" },
     { name = "langchain-anthropic", specifier = ">=0.3.1" },
-    { name = "langchain-groq", specifier = ">=0.2.3" },
-    { name = "langchain-mcp-tools", specifier = ">=0.0.7" },
+    { name = "langchain-mcp-tools", specifier = ">=0.0.8" },
     { name = "langchain-openai", specifier = ">=0.3.0" },
     { name = "langgraph", specifier = ">=0.2.62" },
-    { name = "mcp", specifier = ">=1.2.0" },
-    { name = "pyjson5", specifier = ">=1.6.8" },
-    { name = "pympler", specifier = ">=1.1" },
-    { name = "python-dotenv", specifier = ">=1.0.1" },
 ]
 
 [package.metadata.requires-dev]
