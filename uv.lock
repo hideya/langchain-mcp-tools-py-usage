@@ -684,7 +684,7 @@ wheels = [
 
 [[package]]
 name = "mcp-client-langchain-py"
-version = "0.0.2"
+version = "0.0.7"
 source = { virtual = "." }
 dependencies = [
     { name = "jsonschema-pydantic" },
@@ -712,7 +712,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=0.3.14" },
     { name = "langchain-anthropic", specifier = ">=0.3.1" },
     { name = "langchain-groq", specifier = ">=0.2.3" },
-    { name = "langchain-mcp-tools", specifier = "==0.0.7" },
+    { name = "langchain-mcp-tools", specifier = ">=0.0.7" },
     { name = "langchain-openai", specifier = ">=0.3.0" },
     { name = "langgraph", specifier = ">=0.2.62" },
     { name = "mcp", specifier = ">=1.2.0" },
