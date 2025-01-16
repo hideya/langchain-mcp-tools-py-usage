@@ -6,6 +6,7 @@ import sys
 
 # Third-party imports
 try:
+    from dotenv import load_dotenv
     from langchain.chat_models import init_chat_model
     from langchain.schema import HumanMessage
     from langgraph.prebuilt import create_react_agent
@@ -18,7 +19,7 @@ except ImportError as e:
 from langchain_mcp_tools import convert_mcp_to_langchain_tools
 
 
-# a very simple logger
+# A very simple logger
 def init_logger() -> logging.Logger:
     logging.basicConfig(
         level=logging.INFO,  # logging.DEBUG,
@@ -28,6 +29,7 @@ def init_logger() -> logging.Logger:
 
 
 async def run() -> None:
+    load_dotenv()
     if not os.environ.get('ANTHROPIC_API_KEY'):
         raise Exception('ANTHROPIC_API_KEY env var needs to be set')
     # if not os.environ.get('OPENAI_API_KEY'):
