@@ -12,6 +12,9 @@ and converts their available tools into a list of LangChain-compatible tools
 Anthropic's `claude-3-5-haiku-latest` is used as the LLM.  
 For convenience, code for OpenAI's `gpt-4o-mini` is also included and commented out.
 
+A bit more realistic (conversational) MCP Client is available
+[here](https://github.com/hideya/mcp-client-langchain-py)
+
 A typescript equivalent of this MCP client is available
 [here](https://github.com/hideya/langchain-mcp-tools-ts-usage)
 
