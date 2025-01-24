@@ -18,10 +18,11 @@ A bit more realistic (conversational) MCP Client is available
 A typescript equivalent of this MCP client is available
 [here](https://github.com/hideya/langchain-mcp-tools-ts-usage)
 
-## Requirements
+## Prerequisites
 
 - Python 3.11+
-- [`uv`](https://docs.astral.sh/uv/) installation
+- [`uv`](https://docs.astral.sh/uv/) installed to run Python-based MCP servers
+- npm 7+ to run TypeScript-based MCP servers
 - API key from [Anthropic](https://console.anthropic.com/settings/keys)
   (or [OpenAI](https://platform.openai.com/api-keys))
 
