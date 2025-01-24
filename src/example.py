@@ -83,9 +83,8 @@ async def run() -> None:
 
         result = await agent.ainvoke({'messages': messages})
 
-        result_messages = result['messages']
         # the last message should be an AIMessage
-        response = result_messages[-1].content
+        response = result['messages'][-1].content
 
         print('\x1b[36m')  # color to cyan
         print(response)
