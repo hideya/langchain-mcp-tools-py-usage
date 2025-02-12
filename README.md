@@ -9,8 +9,8 @@ This function handles parallel initialization of specified multiple MCP servers
 and converts their available tools into a list of LangChain-compatible tools
 ([List[BaseTool]](https://python.langchain.com/api_reference/core/tools/langchain_core.tools.base.BaseTool.html#langchain_core.tools.base.BaseTool)).
 
-Anthropic's `claude-3-5-haiku-latest` is used as the LLM.  
-For convenience, code for OpenAI's `gpt-4o-mini` is also included and commented out.
+Anthropic's `claude-3-5-sonnet-latest` is used as the LLM.
+For convenience, code for OpenAI's `gpt-4o` is also included and commented out.
 
 A bit more realistic (conversational) MCP Client is available
 [here](https://github.com/hideya/mcp-client-langchain-py)
