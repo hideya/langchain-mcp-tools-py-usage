@@ -32,6 +32,12 @@ async def run() -> None:
     # Be sure to set ANTHROPIC_API_KEY and/or OPENAI_API_KEY as needed
     load_dotenv()
 
+    # Check the api key early to avoid showing a confusing long trace
+    if not os.environ.get('ANTHROPIC_API_KEY'):
+        raise Exception('ANTHROPIC_API_KEY env var needs to be set')
+    # if not os.environ.get('OPENAI_API_KEY'):
+    #     raise Exception('OPENAI_API_KEY env var needs to be set')
+
     try:
         mcp_configs = {
             'filesystem': {
@@ -47,7 +53,14 @@ async def run() -> None:
                 'args': [
                     'mcp-server-fetch'
                 ]
-            }
+            },
+            'weather': {
+                'command': 'npx',
+                'args': [
+                    '-y',
+                    '@h1deya/mcp-server-weather'
+                ]
+            },
         }
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
@@ -69,8 +82,9 @@ async def run() -> None:
             tools
         )
 
-        query = 'Read the news headlines on bbc.com'
+        # query = 'Read the news headlines on bbc.com'
         # query = 'Read and briefly summarize the LICENSE file'
+        query = "Tomorrow's weather in SF?"
 
         print('\x1b[33m')  # color to yellow
         print(query)
