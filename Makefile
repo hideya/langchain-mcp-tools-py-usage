@@ -12,6 +12,9 @@ install: .venv
 start:
 	uv run src/example.py
 
+update-lib:
+	uv remove langchain-mcp-tools && uv add langchain-mcp-tools
+
 clean:
 	git clean -fdxn -e .env
 	@read -p 'OK?'
