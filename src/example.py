@@ -58,7 +58,8 @@ async def run() -> None:
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
             mcp_configs,
-            # optional: defaults to the module logger if not specified
+            # optional: defaults to the module logger if not specified.
+            # Fallback to a pre-configured logger if no root handlers exist.
             init_logger()
         )
 
