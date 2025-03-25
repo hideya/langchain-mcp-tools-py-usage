@@ -1,7 +1,6 @@
 # Standard library imports
 import asyncio
 import logging
-import os
 import sys
 
 # Third-party imports
@@ -59,6 +58,7 @@ async def run() -> None:
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
             mcp_configs,
+            # optional: defaults to the module logger if not specified
             init_logger()
         )
 
