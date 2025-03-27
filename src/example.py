@@ -32,7 +32,7 @@ async def run() -> None:
     load_dotenv()
 
     try:
-        mcp_configs = {
+        mcp_servers = {
             'filesystem': {
                 'command': 'npx',
                 'args': [
@@ -57,7 +57,7 @@ async def run() -> None:
         }
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
-            mcp_configs,
+            mcp_servers,
             # optional: defaults to the module logger if not specified.
             # Fallback to a pre-configured logger if no root handlers exist.
             init_logger()
