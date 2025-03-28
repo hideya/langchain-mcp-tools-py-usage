@@ -41,12 +41,17 @@ async def run() -> None:
                     '.'  # path to a directory to allow access to
                 ]
             },
-            'fetch': {
-                'command': 'uvx',
-                'args': [
-                    'mcp-server-fetch'
-                ]
-            },
+            # NOTE: somehow, a server run by uvx was no longer shutting down
+            # cleanly, whereas it used to do so.  While investigating the
+            # cause, the following has been commented out.
+            # See this Issue for details:
+            #   https://github.com/hideya/langchain-mcp-tools-py/issues/22
+            # 'fetch': {
+            #     'command': 'uvx',
+            #     'args': [
+            #         'mcp-server-fetch'
+            #     ]
+            # },
             'weather': {
                 'command': 'npx',
                 'args': [
