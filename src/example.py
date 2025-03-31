@@ -2,6 +2,11 @@
 import asyncio
 import logging
 import sys
+from contextlib import ExitStack
+from typing import (
+    Any,
+    Dict,
+)
 
 # Third-party imports
 try:
@@ -32,26 +37,22 @@ async def run() -> None:
     load_dotenv()
 
     try:
-        mcp_servers = {
+        mcp_servers: Dict[str, Dict[str, Any]] = {
             'filesystem': {
                 'command': 'npx',
                 'args': [
                     '-y',
                     '@modelcontextprotocol/server-filesystem',
                     '.'  # path to a directory to allow access to
+                ],
+                # 'cwd': '/tmp'  # the working dir to be use by the server
+            },
+            'fetch': {
+                'command': 'uvx',
+                'args': [
+                    'mcp-server-fetch'
                 ]
             },
-            # NOTE: somehow, a server run by uvx was no longer shutting down
-            # cleanly, whereas it used to do so.  While investigating the
-            # cause, the following has been commented out.
-            # See this Issue for details:
-            #   https://github.com/hideya/langchain-mcp-tools-py/issues/22
-            # 'fetch': {
-            #     'command': 'uvx',
-            #     'args': [
-            #         'mcp-server-fetch'
-            #     ]
-            # },
             'weather': {
                 'command': 'npx',
                 'args': [
@@ -60,6 +61,21 @@ async def run() -> None:
                 ]
             },
         }
+
+        # # Set the file descriptors to which MCP server's stderr is redirected
+        # # NOTE: Why the key name `stderr` was chosen:
+        # # Unlike the TypeScript SDK's `StdioServerParameters`, the Python SDK's
+        # # `StdioServerParameters` doesn't include `stderr`.
+        # # Instead, it calls `stdio_client()` with a separate argument
+        # # `errlog`.  I once thought of using `errlog` for the key for the
+        # # Pyhton version, but decided to follow the TypeScript version since
+        # # its public API already exposes the key name and I choose consistency.
+        # log_file_exit_stack = ExitStack()
+        # for server_name in mcp_servers:
+        #     log_path = f'mcp-server-{server_name}.log'
+        #     log_file = open(log_path, 'w')
+        #     mcp_servers[server_name]['stderr'] = log_file.fileno()
+        #     log_file_exit_stack.callback(log_file.close)
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
             mcp_servers,
@@ -102,6 +118,7 @@ async def run() -> None:
     finally:
         if cleanup is not None:
             await cleanup()
+        # log_file_exit_stack.close()
 
 
 def main() -> None:
