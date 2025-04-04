@@ -40,9 +40,10 @@ async def run() -> None:
     # Be sure to set ANTHROPIC_API_KEY and/or OPENAI_API_KEY as needed
     load_dotenv()
 
-    # If you are interested in testing the SSE/WS server setup, comment out
-    # one of the following code snippets and one of the appropriate "weather"
-    # server configurations, while commenting out the one for the stdio server
+    # If you are interested in testing the SSE/WS server connection,
+    # comment out one of the following code snippets and one of the
+    # appropriate "weather" server configurations, while commenting
+    # out the one for the stdio server
 
     # # Run a test SSE MCP server on the local machine
     # sse_server_process, sse_server_port = start_mcp_server(
@@ -147,18 +148,24 @@ async def run() -> None:
     finally:
         if cleanup is not None:
             await cleanup()
+
+        # the following only needed when testing the `errlog` key
         if "log_file_exit_stack" in locals():
             log_file_exit_stack.close()
+
+        # the followings only needed when testing the `url` key
         if "sse_server_process" in locals():
             sse_server_process.terminate()
         if "ws_server_process" in locals():
             ws_server_process.terminate()
 
 
-def start_mcp_server(transport_type, mcp_server_run_command, wait_time=1):
+# The following only needed when testing the SSE/WS MCP server connection
+def start_mcp_server(transport_type, mcp_server_run_command, wait_time=2):
     """
     Start an MCP server process via supergateway with the specified transport
-    type.  Supergateway runs MCP stdio-based servers over SSE or WebSockets.
+    type.  Supergateway runs MCP stdio-based servers over SSE or WebSockets
+    and is used here to run the SSE/WS servers for connection testing.
     Ref: https://github.com/supercorp-ai/supergateway
 
     Args:
