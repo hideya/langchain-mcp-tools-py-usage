@@ -165,7 +165,7 @@ def start_mcp_server(transport_type, mcp_server_run_command, wait_time=2):
     """
     Start an MCP server process via supergateway with the specified transport
     type.  Supergateway runs MCP stdio-based servers over SSE or WebSockets
-    and is used here to run the SSE/WS servers for connection testing.
+    and is used here to run local SSE/WS servers for connection testing.
     Ref: https://github.com/supercorp-ai/supergateway
 
     Args:
