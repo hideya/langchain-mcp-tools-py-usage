@@ -15,13 +15,13 @@ start:
 update-lib:
 	uv remove langchain-mcp-tools && uv add langchain-mcp-tools
 
-run-sse-auth-test-client: install
-	uv pip install -e ".[dev]"
-	uv run src/sse-auth-test-client.py --no-server
+# E.g.: make run-streamable-http-oauth-test-server
+run-%-test-server:
+	uv run src/$(shell echo $* | tr '-' '_')_test_server.py
 
-run-sse-auth-test-server: install
-	uv pip install -e ".[dev]"
-	uv run src/sse-auth-test-server.py
+# E.g.: make run-streamable-http-oauth-test-client
+run-%-test-client:
+	uv run src/$(shell echo $* | tr '-' '_')_test_client.py
 
 clean:
 	git clean -fdxn -e .env
