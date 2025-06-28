@@ -114,8 +114,20 @@ async def run() -> None:
             init_logger()
         )
 
-        # llm = init_chat_model("anthropic:claude-3-7-sonnet-latest")
-        llm = init_chat_model("openai:o3-mini")
+        ### https://docs.anthropic.com/en/docs/about-claude/pricing
+        ### https://console.anthropic.com/settings/billing
+        # llm = init_chat_model("anthropic:claude-3-5-haiku-latest")
+        # llm = init_chat_model("anthropic:claude-sonnet-4-0")
+        
+        ### https://platform.openai.com/docs/pricing
+        ### https://platform.openai.com/settings/organization/billing/overview
+        # llm = init_chat_model("openai:gpt-4o-mini")
+        # llm = init_chat_model("openai:o4-mini")
+        
+        ### https://ai.google.dev/gemini-api/docs/pricing
+        ### https://console.cloud.google.com/billing
+        llm = init_chat_model("google_genai:gemini-2.0-flash")
+        # llm = init_chat_model("google_genai:gemini-1.5-pro")
 
         agent = create_react_agent(
             llm,
@@ -124,7 +136,7 @@ async def run() -> None:
 
         # query = "Read the news headlines on bbc.com"
         # query = "Read and briefly summarize the LICENSE file"
-        query = "Tomorrow's weather in SF?"
+        query = "Are there any weather alerts in California?"
 
         print("\x1b[33m")  # color to yellow
         print(query)

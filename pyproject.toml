@@ -1,15 +1,16 @@
 [project]
 name = "mcp-client-langchain-py"
-version = "0.2.4"
+version = "0.2.7"
 description = "MCP Client Using LangChain / Python"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "langchain-mcp-tools>=0.2.4",
-    "langchain>=0.3.14",
+    "langchain-mcp-tools>=0.2.7",
+    "langchain>=0.3.26",
+    "langgraph>=0.5.0",
+    "langchain-google-genai>=2.1.5",
     "langchain-anthropic>=0.3.1",
     "langchain-openai>=0.3.0",
-    "langgraph>=0.2.62",
     "fastapi>=0.115.12",
     "pyjwt>=2.10.1",
     "websockets>=15.0.1",
