@@ -154,7 +154,7 @@ async def run() -> None:
         print("\x1b[0m")   # reset the color
 
     finally:
-        if cleanup is not None:
+        if "cleanup" in locals():
             await cleanup()
 
         # the following only needed when testing the `errlog` key
