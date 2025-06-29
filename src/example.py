@@ -1,6 +1,7 @@
 # Standard library imports
 import asyncio
 import logging
+import os
 import socket
 import subprocess
 import sys
@@ -64,12 +65,14 @@ async def run() -> None:
                 ],
                 # "cwd": "/tmp"  # the working dir to be use by the server
             },
+
             "fetch": {
                 "command": "uvx",
                 "args": [
                     "mcp-server-fetch"
                 ]
             },
+
             "weather": {
                 "command": "npx",
                 "args": [
@@ -77,11 +80,33 @@ async def run() -> None:
                     "@h1deya/mcp-server-weather"
                 ]
             },
+
+            # # Auto-detection example: This will try Streamable HTTP first, then fallback to SSE
             # "weather": {
             #     "url": f"http://localhost:{sse_server_port}/sse"
             # },
+
             # "weather": {
-            #     "url": f"ws://localhost:{ws_server_port}/message"
+            #     "url": f"http://localhost:{sse_server_port}/sse",
+            #     "transport": "sse"  # Force SSE
+            #     # "type": "sse"  # This also works instead of the above
+            # },
+
+            # "weather": {
+            #     "url": f"ws://localhost:{ws_server_port}/message",
+            #     # optionally `"transport": "ws"` or `"type": "ws"`
+            # },
+
+            # # Example of authentication via Authorization header
+            # # https://github.com/github/github-mcp-server?tab=readme-ov-file#remote-github-mcp-server
+            # "github": {
+            #     # To avoid auto protocol fallback, specify the protocol explicitly when using authentication
+            #     "type": "http",
+            #     # "__pre_validate_authentication": False,
+            #     "url": "https://api.githubcopilot.com/mcp/",
+            #     "headers": {
+            #         "Authorization": f"Bearer {os.environ.get('GITHUB_PERSONAL_ACCESS_TOKEN', '')}"
+            #     }
             # },
         }
 
@@ -89,13 +114,6 @@ async def run() -> None:
         # uncomment the following code snippets.
 
         # # Set a file-like object to which MCP server's stderr is redirected
-        # # NOTE: Why the key name `errlog` for `server_config` was chosen:
-        # # Unlike TypeScript SDK's `StdioServerParameters`, the Python
-        # # SDK's `StdioServerParameters` doesn't include `stderr: int`.
-        # # Instead, it calls `stdio_client()` with a separate argument
-        # # `errlog: TextIO`.  I once included `stderr: int` for
-        # # compatibility with the TypeScript version, but decided to
-        # # follow the Python SDK more closely.
         # log_file_exit_stack = ExitStack()
         # for server_name in mcp_servers:
         #     server_config = mcp_servers[server_name]
@@ -154,7 +172,7 @@ async def run() -> None:
         print("\x1b[0m")   # reset the color
 
     finally:
-        if cleanup is not None:
+        if "cleanup" in locals():
             await cleanup()
 
         # the following only needed when testing the `errlog` key

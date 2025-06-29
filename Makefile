@@ -12,9 +12,6 @@ install: .venv
 start:
 	uv run src/example.py
 
-update-lib:
-	uv remove langchain-mcp-tools && uv add langchain-mcp-tools
-
 # E.g.: make run-streamable-http-oauth-test-server
 run-%-test-server:
 	uv run src/$(shell echo $* | tr '-' '_')_test_server.py

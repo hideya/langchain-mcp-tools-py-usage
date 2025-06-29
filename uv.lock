@@ -619,16 +619,16 @@ wheels = [
 
 [[package]]
 name = "langchain-mcp-tools"
-version = "0.2.7"
+version = "0.2.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema-pydantic" },
     { name = "langchain" },
     { name = "mcp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e2/e4/59c068cf4c4bc64ed97d92985c994891c2dc54d813009d4fd9a14c93023e/langchain_mcp_tools-0.2.7.tar.gz", hash = "sha256:8f1ffb8f33ff7474a12dac42b0fbfadd4b31a8b55234529726fe4481b9e66f0f", size = 25537, upload-time = "2025-06-28T03:53:51.908Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5a/eb/c88fb913dbd2a13f2a62cab279730642a13d93d8ae998d5d8426bf8be64e/langchain_mcp_tools-0.2.8.tar.gz", hash = "sha256:8ce1802cf32aec0fd50ce6cda8ebed560b480583c40dd1e99a482cd098b8c9d4", size = 25792, upload-time = "2025-06-29T07:15:09.359Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e3/04/ad813fe50d61e50db280397aa654a9424aa8b4678ee648c795cecfd2ee9c/langchain_mcp_tools-0.2.7-py3-none-any.whl", hash = "sha256:f9e3ee68abf5ae9e723cad2f292906f8b833f99ceeca7d7620747b199405de60", size = 19988, upload-time = "2025-06-28T03:53:50.154Z" },
+    { url = "https://files.pythonhosted.org/packages/f7/5a/4a7c69dfb61969b036c531e63b3fff9fabd19409c47a6236122d331865b5/langchain_mcp_tools-0.2.8-py3-none-any.whl", hash = "sha256:b8f6b69d54bf9e579a6d40a782b8f2fea4a2fa479e0a43f6e1576e98c2218ada", size = 20308, upload-time = "2025-06-29T07:15:07.969Z" },
 ]
 
 [[package]]
@@ -754,7 +754,7 @@ wheels = [
 
 [[package]]
 name = "mcp-client-langchain-py"
-version = "0.2.7"
+version = "0.2.8"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi" },
@@ -774,7 +774,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=0.3.26" },
     { name = "langchain-anthropic", specifier = ">=0.3.1" },
     { name = "langchain-google-genai", specifier = ">=2.1.5" },
-    { name = "langchain-mcp-tools", specifier = ">=0.2.7" },
+    { name = "langchain-mcp-tools", specifier = ">=0.2.8" },
     { name = "langchain-openai", specifier = ">=0.3.0" },
     { name = "langgraph", specifier = ">=0.5.0" },
     { name = "pyjwt", specifier = ">=2.10.1" },
@@ -1439,15 +1439,15 @@ wheels = [
 
 [[package]]
 name = "uvicorn"
-version = "0.34.3"
+version = "0.35.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "h11" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/de/ad/713be230bcda622eaa35c28f0d328c3675c371238470abdea52417f17a8e/uvicorn-0.34.3.tar.gz", hash = "sha256:35919a9a979d7a59334b6b10e05d77c1d0d574c50e0fc98b8b1a0f165708b55a", size = 76631, upload-time = "2025-06-01T07:48:17.531Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5e/42/e0e305207bb88c6b8d3061399c6a961ffe5fbb7e2aa63c9234df7259e9cd/uvicorn-0.35.0.tar.gz", hash = "sha256:bc662f087f7cf2ce11a1d7fd70b90c9f98ef2e2831556dd078d131b96cc94a01", size = 78473, upload-time = "2025-06-28T16:15:46.058Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6d/0d/8adfeaa62945f90d19ddc461c55f4a50c258af7662d34b6a3d5d1f8646f6/uvicorn-0.34.3-py3-none-any.whl", hash = "sha256:16246631db62bdfbf069b0645177d6e8a77ba950cfedbfd093acef9444e4d885", size = 62431, upload-time = "2025-06-01T07:48:15.664Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/e2/dc81b1bd1dcfe91735810265e9d26bc8ec5da45b4c0f6237e286819194c3/uvicorn-0.35.0-py3-none-any.whl", hash = "sha256:197535216b25ff9b785e29a0b79199f55222193d47f820816e7da751e9bc8d4a", size = 66406, upload-time = "2025-06-28T16:15:44.816Z" },
 ]
 
 [[package]]
