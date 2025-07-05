@@ -2,14 +2,8 @@
 import asyncio
 import logging
 import os
-import socket
-import subprocess
 import sys
-import time
 from contextlib import ExitStack
-from typing import (
-    Any,
-)
 
 # Third-party imports
 try:
@@ -29,6 +23,7 @@ from langchain_mcp_tools import (
 )
 from remote_server_utils import start_remote_mcp_server_locally
 
+
 # A very simple logger
 def init_logger() -> logging.Logger:
     logging.basicConfig(
@@ -39,25 +34,23 @@ def init_logger() -> logging.Logger:
 
 
 async def run() -> None:
-    # Be sure to set ANTHROPIC_API_KEY and/or OPENAI_API_KEY as needed
     load_dotenv()
 
-    # If you are interested in testing the SSE/WS server connection,
-    # uncomment one of the following code snippets and one of the
-    # appropriate "weather" server configurations, while commenting
-    # out the one for the stdio server
+    # If you are interested in testing the SSE/WS server connection, uncomment
+    # one of the following code snippets and one of the appropriate "weather"
+    # server configurations, while commenting out the others.
 
-    # # Run a test SSE MCP server on the local machine
     # sse_server_process, sse_server_port = start_remote_mcp_server_locally(
-    #     "SSE",  "npx -y @h1deya/mcp-server-weather")
+    #     "SSE", "npx -y @h1deya/mcp-server-weather")
 
-    # # Run a test Websocket MCP server on the local machine
     # ws_server_process, ws_server_port = start_remote_mcp_server_locally(
-    #     "WS",  "npx -y @h1deya/mcp-server-weather")
+    #     "WS", "npx -y @h1deya/mcp-server-weather")
 
     try:
         mcp_servers: McpServersConfig = {
             "filesystem": {
+                # "transport": "stdio",  // optional
+                # "type": "stdio",  // optional: VSCode-style config works too
                 "command": "npx",
                 "args": [
                     "-y",
@@ -74,7 +67,7 @@ async def run() -> None:
                 ]
             },
 
-            "weather": {
+            "us-weather": {  # US weather only
                 "command": "npx",
                 "args": [
                     "-y",
@@ -83,21 +76,35 @@ async def run() -> None:
             },
 
             # # Auto-detection example: This will try Streamable HTTP first, then fallback to SSE
-            # "weather": {
+            # "us-weather": {
             #     "url": f"http://localhost:{sse_server_port}/sse"
             # },
-
-            # "weather": {
+            
+            # # THIS DOESN'T WORK: Example of explicit transport selection:
+            # "us-weather": {
+            #     "url": f"http://localhost:{streamable_http_server_port}/mcp",
+            #     "transport": "streamable_http"  # Force Streamable HTTP
+            #     # "type": "http"  # VSCode-style config also works instead of the above
+            # },
+            
+            # "us-weather": {
             #     "url": f"http://localhost:{sse_server_port}/sse",
             #     "transport": "sse"  # Force SSE
             #     # "type": "sse"  # This also works instead of the above
             # },
 
-            # "weather": {
+            # "us-weather": {
             #     "url": f"ws://localhost:{ws_server_port}/message",
             #     # optionally `"transport": "ws"` or `"type": "ws"`
             # },
-
+            
+            # # https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search
+            # "brave-search": {
+            #     "command": "npx",
+            #     "args": [ "-y", "@modelcontextprotocol/server-brave-search"],
+            #     "env": { "BRAVE_API_KEY": os.environ.get('BRAVE_API_KEY') }
+            # },
+            
             # # Example of authentication via Authorization header
             # # https://github.com/github/github-mcp-server?tab=readme-ov-file#remote-github-mcp-server
             # "github": {
@@ -106,8 +113,47 @@ async def run() -> None:
             #     # "__pre_validate_authentication": False,
             #     "url": "https://api.githubcopilot.com/mcp/",
             #     "headers": {
-            #         "Authorization": f"Bearer {os.environ.get('GITHUB_PERSONAL_ACCESS_TOKEN', '')}"
+            #         "Authorization": f"Bearer {os.environ.get('GITHUB_PERSONAL_ACCESS_TOKEN')}"
             #     }
+            # },
+            
+            # "notion": {
+            #     "command": "npx",
+            #     "args": ["-y", "@notionhq/notion-mcp-server"],
+            #     "env": {
+            #         # Although the following implies that this MCP server is designed for
+            #         # OpenAI LLMs, it works fine with others models.
+            #         # Tested Claude and Gemini.
+            #         "OPENAPI_MCP_HEADERS": (
+            #             '{"Authorization": "Bearer '
+            #             f'{os.environ.get("NOTION_INTEGRATION_SECRET")}", '
+            #             '"Notion-Version": "2022-06-28"}')
+            #     },
+            # },
+            
+            # "sqlite": {
+            #     "command": "uvx",
+            #     "args": [
+            #         "mcp-server-sqlite",
+            #         "--db-path",
+            #         "mcp-server-sqlite-test.sqlite3"
+            #     ],
+            #     "cwd": "/tmp"  # the working directory to be use by the server
+            # },
+
+            # "sequential-thinking": {
+            #     "command": "npx",
+            #     "args": [
+            #         "-y",
+            #         "@modelcontextprotocol/server-sequential-thinking"
+            #     ]
+            # },
+
+            # "playwright": {
+            #     "command": "npx",
+            #     "args": [
+            #         "@playwright/mcp@latest"
+            #     ]
             # },
         }
 
@@ -128,9 +174,8 @@ async def run() -> None:
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
             mcp_servers,
-            # optional: defaults to the module logger if not specified.
-            # Fallback to a pre-configured logger if no root handlers exist.
-            init_logger()
+            # logging.DEBUG
+            # init_logger()
         )
 
         ### https://docs.anthropic.com/en/docs/about-claude/pricing
@@ -140,23 +185,34 @@ async def run() -> None:
         
         ### https://platform.openai.com/docs/pricing
         ### https://platform.openai.com/settings/organization/billing/overview
-        # llm = init_chat_model("openai:gpt-4o-mini")
+        # llm = init_chat_model("openai:gpt-4.1-nano")
         # llm = init_chat_model("openai:o4-mini")
         
         ### https://ai.google.dev/gemini-api/docs/pricing
         ### https://console.cloud.google.com/billing
-        llm = init_chat_model("google_genai:gemini-2.0-flash")
-        # llm = init_chat_model("google_genai:gemini-1.5-pro")
+        llm = init_chat_model("google_genai:gemini-2.5-flash")
+        # llm = init_chat_model("google_genai:gemini-2.5-pro")
 
         agent = create_react_agent(
             llm,
             tools
         )
+        
+        print("\x1b[32m");  # color to green
+        print("\nLLM model:", getattr(llm, 'model', getattr(llm, 'model_name', 'unknown')))
+        print("\x1b[0m");  # reset the color
 
+        query = "Are there any weather alerts in California?"
+        # query = "Tell me how LLMs work in a few sentences"
         # query = "Read the news headlines on bbc.com"
         # query = "Read and briefly summarize the LICENSE file"
-        query = "Are there any weather alerts in California?"
-
+        # query = "Tell me the number of directories in the current directory"
+        # query = ("Make a new table in DB and put items apple and orange with counts 123 and 345 respectively, "
+        #         "then increment the coutns by 1, and show all the items in the table.")
+        # query = "Open bbc.com page"
+        # query = "Tell me about my Notion account"
+        # query = "What's the news from Tokyo today?"
+        
         print("\x1b[33m")  # color to yellow
         print(query)
         print("\x1b[0m")   # reset the color
@@ -165,8 +221,9 @@ async def run() -> None:
 
         result = await agent.ainvoke({"messages": messages})
 
+        result_messages = result["messages"]
         # the last message should be an AIMessage
-        response = result["messages"][-1].content
+        response = result_messages[-1].content
 
         print("\x1b[36m")  # color to cyan
         print(response)

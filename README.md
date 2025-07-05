@@ -9,7 +9,7 @@ This function handles parallel initialization of specified multiple MCP servers
 and converts their available tools into a list of LangChain-compatible tools
 ([list[BaseTool]](https://python.langchain.com/api_reference/core/tools/langchain_core.tools.base.BaseTool.html#langchain_core.tools.base.BaseTool)).
 
-Google GenAI's `gemini-2.0-flash` is used as the LLM.
+Google GenAI's `gemini-2.5-flash` is used as the LLM.
 For convenience, code for OpenAI's and Anthropic's LLMs are also included and commented out.
 
 A bit more realistic (conversational) MCP Client is available
