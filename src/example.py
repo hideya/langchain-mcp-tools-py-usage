@@ -192,6 +192,10 @@ async def run() -> None:
         ### https://console.cloud.google.com/billing
         llm = init_chat_model("google_genai:gemini-2.5-flash")
         # llm = init_chat_model("google_genai:gemini-2.5-pro")
+        
+        ### https://console.x.ai
+        # llm = init_chat_model("xai:grok-3-mini")
+        # llm = init_chat_model("xai:grok-4")
 
         agent = create_react_agent(
             llm,
@@ -230,6 +234,7 @@ async def run() -> None:
         print("\x1b[0m")   # reset the color
 
     finally:
+        # cleanup can be undefined when an exeption occurs during initialization
         if "cleanup" in locals():
             await cleanup()
 
