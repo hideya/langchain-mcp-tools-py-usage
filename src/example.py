@@ -117,18 +117,24 @@ async def run() -> None:
             #     }
             # },
             
-            # "notion": {
+            # # NOTE: comment out "fetch" when you use "notion".
+            # # They both have a tool named "fetch," which causes a conflict.
+            #
+            # "notion": {  # For MCP servers that require OAuth, consider using "mcp-remote"
             #     "command": "npx",
-            #     "args": ["-y", "@notionhq/notion-mcp-server"],
-            #     "env": {
-            #         # Although the following implies that this MCP server is designed for
-            #         # OpenAI LLMs, it works fine with others models.
-            #         # Tested Claude and Gemini.
-            #         "OPENAPI_MCP_HEADERS": (
-            #             '{"Authorization": "Bearer '
-            #             f'{os.environ.get("NOTION_INTEGRATION_SECRET")}", '
-            #             '"Notion-Version": "2022-06-28"}')
-            #     },
+            #     "args": ["-y", "mcp-remote", "https://mcp.notion.com/mcp"],
+            # },
+            #
+            # # The following Notion local MCP server is not recommended anymore?
+            # # Refs:
+            # # - https://developers.notion.com/docs/get-started-with-mcp
+            # # - https://www.npmjs.com/package/@notionhq/notion-mcp-server
+            # "notion": {
+            #   "command": "npx",
+            #   "args": ["-y", "@notionhq/notion-mcp-server"],
+            #   "env": {
+            #    "NOTION_TOKEN": os.environ.get("NOTION_INTEGRATION_SECRET", "")
+            #   }
             # },
             
             # "sqlite": {
@@ -210,7 +216,7 @@ async def run() -> None:
         # query = "Tell me how LLMs work in a few sentences"
         # query = "Read the news headlines on bbc.com"
         # query = "Read and briefly summarize the LICENSE file"
-        # query = "Tell me the number of directories in the current directory"
+        # query = "Tell me how many directories there are in `.`"
         # query = ("Make a new table in DB and put items apple and orange with counts 123 and 345 respectively, "
         #         "then increment the coutns by 1, and show all the items in the table.")
         # query = "Open bbc.com page"
