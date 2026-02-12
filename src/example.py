@@ -78,7 +78,6 @@ async def run() -> None:
             # "github": {
             #     # To avoid auto protocol fallback, specify the protocol explicitly when using authentication
             #     "type": "http",
-            #     # "__pre_validate_authentication": False,
             #     "url": "https://api.githubcopilot.com/mcp/",
             #     "headers": {
             #         "Authorization": f"Bearer {os.environ.get('GITHUB_PERSONAL_ACCESS_TOKEN')}"
@@ -102,20 +101,20 @@ async def run() -> None:
             # "Tell me about my Notion account",
         ]
 
-        # If you are interested in MCP server's stderr redirection,
-        # uncomment the following code snippets.
-        #
-        # Set a file-like object to which MCP server's stderr is redirected
-        log_file_exit_stack = ExitStack()
-        for server_name in mcp_servers:
-            server_config = mcp_servers[server_name]
-            # Skip URL-based servers (no command)
-            if "command" not in server_config:
-                continue
-            log_path = f"mcp-server-{server_name}.log"
-            log_file = open(log_path, "w")
-            server_config["errlog"] = log_file
-            log_file_exit_stack.callback(log_file.close)
+        # # If you are interested in local MCP server's stderr redirection,
+        # # uncomment the following code snippets.
+        # #
+        # # Set a file-like object to which MCP server's stderr is redirected
+        # log_file_exit_stack = ExitStack()
+        # for server_name in mcp_servers:
+        #     server_config = mcp_servers[server_name]
+        #     # Skip URL-based servers (no command)
+        #     if "command" not in server_config:
+        #         continue
+        #     log_path = f"mcp-server-{server_name}.log"
+        #     log_file = open(log_path, "w")
+        #     server_config["errlog"] = log_file
+        #     log_file_exit_stack.callback(log_file.close)
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
             mcp_servers,
