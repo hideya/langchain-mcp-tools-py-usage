@@ -12,14 +12,6 @@ install: .venv
 start:
 	uv run src/example.py
 
-# E.g.: make run-streamable-http-oauth-test-server
-run-%-test-server:
-	uv run src/$(shell echo $* | tr '-' '_')_test_server.py
-
-# E.g.: make run-streamable-http-oauth-test-client
-run-%-test-client:
-	uv run src/$(shell echo $* | tr '-' '_')_test_client.py
-
 cleanall:
 	git clean -fdxn -e .env
 	@read -p 'OK? '

@@ -898,7 +898,6 @@ dependencies = [
     { name = "langchain-google-genai" },
     { name = "langchain-mcp-tools" },
     { name = "langchain-openai" },
-    { name = "websockets" },
 ]
 
 [package.metadata]
@@ -912,7 +911,6 @@ requires-dist = [
     { name = "langchain-google-genai", specifier = ">=4.2.0" },
     { name = "langchain-mcp-tools", specifier = ">=0.3.0" },
     { name = "langchain-openai", specifier = ">=1.1.8" },
-    { name = "websockets", specifier = ">=15.0.1" },
 ]
 
 [[package]]

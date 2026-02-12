@@ -14,5 +14,4 @@ dependencies = [
     "langchain-google-genai>=4.2.0",
     "langchain-openai>=1.1.8",
     "langchain>=1.2.9",
-    "websockets>=15.0.1",
 ]

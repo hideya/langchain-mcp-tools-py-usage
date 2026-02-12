@@ -40,8 +40,8 @@ async def run() -> None:
             # Local MCP server that uses `npx`
             # https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem
             "filesystem": {
-                # "transport": "stdio",  // optional
-                # "type": "stdio",  // optional: VSCode-style config works too
+                # "transport": "stdio",  # optional
+                # "type": "stdio",  # optional: VSCode-style config works too
                 "command": "npx",
                 "args": [
                     "-y",
@@ -51,7 +51,7 @@ async def run() -> None:
                 # "cwd": "/tmp"  # the working dir to be use by the server
             },
 
-            # Another local server that uses `uvx`
+            # Local MCP server that uses `uvx`
             # https://pypi.org/project/mcp-server-fetch/
             "fetch": {
                 "command": "uvx",
