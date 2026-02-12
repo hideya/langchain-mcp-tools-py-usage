@@ -9,8 +9,8 @@ from contextlib import ExitStack
 try:
     from dotenv import load_dotenv
     from langchain.chat_models import init_chat_model
-    from langchain.schema import HumanMessage
-    from langgraph.prebuilt import create_react_agent
+    from langchain_core.messages import HumanMessage
+    from langchain.agents import create_agent
 except ImportError as e:
     print(f"\nError: Required package not found: {e}")
     print("Please ensure all required packages are installed\n")
@@ -21,14 +21,13 @@ from langchain_mcp_tools import (
     convert_mcp_to_langchain_tools,
     McpServersConfig,
 )
-from remote_server_utils import start_remote_mcp_server_locally
-
 
 # A very simple logger
 def init_logger() -> logging.Logger:
     logging.basicConfig(
-        level=logging.INFO,  # logging.DEBUG,
-        format="\x1b[90m[%(levelname)s]\x1b[0m %(message)s"
+        # level=logging.DEBUG,
+        level=logging.INFO,
+        format="\x1b[90m%(levelname)s:\x1b[0m %(message)s"
     )
     return logging.getLogger()
 
@@ -36,18 +35,10 @@ def init_logger() -> logging.Logger:
 async def run() -> None:
     load_dotenv()
 
-    # If you are interested in testing the SSE/WS server connection, uncomment
-    # one of the following code snippets and one of the appropriate "weather"
-    # server configurations, while commenting out the others.
-
-    # sse_server_process, sse_server_port = start_remote_mcp_server_locally(
-    #     "SSE", "npx -y @h1deya/mcp-server-weather")
-
-    # ws_server_process, ws_server_port = start_remote_mcp_server_locally(
-    #     "WS", "npx -y @h1deya/mcp-server-weather")
-
     try:
         mcp_servers: McpServersConfig = {
+            # Local MCP server that uses `npx`
+            # https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem
             "filesystem": {
                 # "transport": "stdio",  // optional
                 # "type": "stdio",  // optional: VSCode-style config works too
@@ -60,6 +51,8 @@ async def run() -> None:
                 # "cwd": "/tmp"  # the working dir to be use by the server
             },
 
+            # Another local server that uses `uvx`
+            # https://pypi.org/project/mcp-server-fetch/
             "fetch": {
                 "command": "uvx",
                 "args": [
@@ -67,45 +60,20 @@ async def run() -> None:
                 ]
             },
 
-            "us-weather": {  # US weather only
-                "command": "npx",
-                "args": [
-                    "-y",
-                    "@h1deya/mcp-server-weather"
-                ]
-            },
-
-            # # Auto-detection example: This will try Streamable HTTP first, then fallback to SSE
-            # "us-weather": {
-            #     "url": f"http://localhost:{sse_server_port}/sse"
-            # },
-            
-            # # THIS DOESN'T WORK: Example of explicit transport selection:
-            # "us-weather": {
-            #     "url": f"http://localhost:{streamable_http_server_port}/mcp",
-            #     "transport": "streamable_http"  # Force Streamable HTTP
-            #     # "type": "http"  # VSCode-style config also works instead of the above
-            # },
-            
-            # "us-weather": {
-            #     "url": f"http://localhost:{sse_server_port}/sse",
-            #     "transport": "sse"  # Force SSE
-            #     # "type": "sse"  # This also works instead of the above
-            # },
-
-            # "us-weather": {
-            #     "url": f"ws://localhost:{ws_server_port}/message",
-            #     # optionally `"transport": "ws"` or `"type": "ws"`
-            # },
-            
-            # # https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search
+            # # Embedding the value of an environment variable
+            # # https://www.npmjs.com/package/@modelcontextprotocol/server-brave-search
             # "brave-search": {
             #     "command": "npx",
-            #     "args": [ "-y", "@modelcontextprotocol/server-brave-search"],
-            #     "env": { "BRAVE_API_KEY": os.environ.get('BRAVE_API_KEY') }
+            #     "args": [
+            #         "-y",
+            #         "@modelcontextprotocol/server-brave-search"
+            #     ],
+            #     "env": {
+            #         "BRAVE_API_KEY": os.environ.get("BRAVE_API_KEY")
+            #     }
             # },
-            
-            # # Example of authentication via Authorization header
+
+            # # Example of remote MCP server authentication via Authorization header
             # # https://github.com/github/github-mcp-server?tab=readme-ov-file#remote-github-mcp-server
             # "github": {
             #     # To avoid auto protocol fallback, specify the protocol explicitly when using authentication
@@ -116,67 +84,38 @@ async def run() -> None:
             #         "Authorization": f"Bearer {os.environ.get('GITHUB_PERSONAL_ACCESS_TOKEN')}"
             #     }
             # },
-            
-            # # NOTE: comment out "fetch" when you use "notion".
-            # # They both have a tool named "fetch," which causes a conflict.
-            #
-            # "notion": {  # For MCP servers that require OAuth, consider using "mcp-remote"
+
+            # # For remote MCP servers that require OAuth, consider using "mcp-remote"
+            # "notion": {
             #     "command": "npx",
             #     "args": ["-y", "mcp-remote", "https://mcp.notion.com/mcp"],
             # },
-            #
-            # # The following Notion local MCP server is not recommended anymore?
-            # # Refs:
-            # # - https://developers.notion.com/docs/get-started-with-mcp
-            # # - https://www.npmjs.com/package/@notionhq/notion-mcp-server
-            # "notion": {
-            #   "command": "npx",
-            #   "args": ["-y", "@notionhq/notion-mcp-server"],
-            #   "env": {
-            #    "NOTION_TOKEN": os.environ.get("NOTION_INTEGRATION_SECRET", "")
-            #   }
-            # },
-            
-            # "sqlite": {
-            #     "command": "uvx",
-            #     "args": [
-            #         "mcp-server-sqlite",
-            #         "--db-path",
-            #         "mcp-server-sqlite-test.sqlite3"
-            #     ],
-            #     "cwd": "/tmp"  # the working directory to be use by the server
-            # },
-
-            # "sequential-thinking": {
-            #     "command": "npx",
-            #     "args": [
-            #         "-y",
-            #         "@modelcontextprotocol/server-sequential-thinking"
-            #     ]
-            # },
-
-            # "playwright": {
-            #     "command": "npx",
-            #     "args": [
-            #         "@playwright/mcp@latest"
-            #     ]
-            # },
         }
+
+        queries = [
+            "Read and briefly summarize the LICENSE file in the current directory",
+            "Fetch the raw HTML content from bbc.com and tell me the titile",
+            # # NOTE: The following is to test tool call error handling
+            # "Try to fetch the raw HTML content from abc.bbc.com, bbc.com and xyz.bbc.com, and tell me which is succesful",
+            # "Search for 'news in California' and show the first hit",
+            # "Tell me about my GitHub profile",
+            # "Tell me about my Notion account",
+        ]
 
         # If you are interested in MCP server's stderr redirection,
         # uncomment the following code snippets.
-
-        # # Set a file-like object to which MCP server's stderr is redirected
-        # log_file_exit_stack = ExitStack()
-        # for server_name in mcp_servers:
-        #     server_config = mcp_servers[server_name]
-        #     # Skip URL-based servers (no command)
-        #     if "command" not in server_config:
-        #         continue
-        #     log_path = f"mcp-server-{server_name}.log"
-        #     log_file = open(log_path, "w")
-        #     server_config["errlog"] = log_file
-        #     log_file_exit_stack.callback(log_file.close)
+        #
+        # Set a file-like object to which MCP server's stderr is redirected
+        log_file_exit_stack = ExitStack()
+        for server_name in mcp_servers:
+            server_config = mcp_servers[server_name]
+            # Skip URL-based servers (no command)
+            if "command" not in server_config:
+                continue
+            log_path = f"mcp-server-{server_name}.log"
+            log_file = open(log_path, "w")
+            server_config["errlog"] = log_file
+            log_file_exit_stack.callback(log_file.close)
 
         tools, cleanup = await convert_mcp_to_langchain_tools(
             mcp_servers,
@@ -184,60 +123,73 @@ async def run() -> None:
             # init_logger()
         )
 
-        ### https://docs.anthropic.com/en/docs/about-claude/pricing
-        ### https://console.anthropic.com/settings/billing
-        # llm = init_chat_model("anthropic:claude-3-5-haiku-latest")
-        # llm = init_chat_model("anthropic:claude-sonnet-4-0")
-        
-        ### https://platform.openai.com/docs/pricing
+        ### https://developers.openai.com/api/docs/pricing
         ### https://platform.openai.com/settings/organization/billing/overview
-        # llm = init_chat_model("openai:gpt-4.1-nano")
-        # llm = init_chat_model("openai:o4-mini")
-        
+        model_name = "openai:gpt-5-mini"
+        # model_name = "openai:gpt-5.2"
+
+        ### https://platform.claude.com/docs/en/about-claude/models/overview
+        ### https://console.anthropic.com/settings/billing
+        # model_name = "anthropic:claude-3-5-haiku-latest"
+        # model_name = "anthropic:claude-haiku-4-5"
+
         ### https://ai.google.dev/gemini-api/docs/pricing
         ### https://console.cloud.google.com/billing
-        llm = init_chat_model("google_genai:gemini-2.5-flash")
-        # llm = init_chat_model("google_genai:gemini-2.5-pro")
-        
-        ### https://console.x.ai
-        # llm = init_chat_model("xai:grok-3-mini")
-        # llm = init_chat_model("xai:grok-4")
+        # model_name = "google_genai:gemini-2.5-flash"
+        # model_name = "google_genai:gemini-3-flash-preview"
 
-        agent = create_react_agent(
-            llm,
+        ### https://docs.x.ai/developers/models
+        # model_name = "xai:grok-3-mini"
+        # model_name = "xai:grok-4-1-fast-non-reasoning"
+
+        model = init_chat_model(model_name)
+
+        agent = create_agent(
+            model,
             tools
         )
-        
-        print("\x1b[32m");  # color to green
-        print("\nLLM model:", getattr(llm, 'model', getattr(llm, 'model_name', 'unknown')))
-        print("\x1b[0m");  # reset the color
 
-        query = "Are there any weather alerts in California?"
-        # query = "Tell me how LLMs work in a few sentences"
-        # query = "Read the news headlines on bbc.com"
-        # query = "Read and briefly summarize the LICENSE file"
-        # query = "Tell me how many directories there are in `.`"
-        # query = ("Make a new table in DB and put items apple and orange with counts 123 and 345 respectively, "
-        #         "then increment the coutns by 1, and show all the items in the table.")
-        # query = "Open bbc.com page"
-        # query = "Tell me about my Notion account"
-        # query = "What's the news from Tokyo today?"
-        
-        print("\x1b[33m")  # color to yellow
-        print(query)
-        print("\x1b[0m")   # reset the color
+        print("\x1b[32m", end="")  # color to green
+        print("\nLLM model:", getattr(model, 'model', getattr(model, 'model_name', 'unknown')))
+        print("\x1b[0m", end="")  # reset the color
 
-        messages = [HumanMessage(content=query)]
+        for query in queries:
+            print("\x1b[33m")  # color to yellow
+            print(query)
+            print("\x1b[0m")   # reset the color
 
-        result = await agent.ainvoke({"messages": messages})
+            messages = [HumanMessage(content=query)]
 
-        result_messages = result["messages"]
-        # the last message should be an AIMessage
-        response = result_messages[-1].content
+            result = await agent.ainvoke({"messages": messages})
 
-        print("\x1b[36m")  # color to cyan
-        print(response)
-        print("\x1b[0m")   # reset the color
+            result_messages = result["messages"]
+            # the last message should be an AIMessage
+            response_content = result_messages[-1].content
+
+            # Handle both string and list content (for multimodal models)
+            # NOTE: Gemini 3 preview returns a list content, even for a single text
+            if isinstance(response_content, str):
+                response = response_content
+            elif isinstance(response_content, list):
+                # Extract text from content blocks
+                text_parts = []
+                for block in response_content:
+                    if isinstance(block, dict) and "text" in block:
+                        text_parts.append(block["text"])
+                    elif isinstance(block, str):
+                        text_parts.append(block)
+                    elif hasattr(block, "text"):
+                        text_parts.append(block.text)
+                response = " ".join(text_parts) if text_parts else ""
+                print(response)
+            else:
+                raise TypeError(
+                    f"Unexpected response content type: {type(response_content)}"
+                )
+
+            print("\x1b[36m")  # color to cyan
+            print(response)
+            print("\x1b[0m")   # reset the color
 
     finally:
         # cleanup can be undefined when an exeption occurs during initialization
@@ -247,12 +199,6 @@ async def run() -> None:
         # the following only needed when testing the `errlog` key
         if "log_file_exit_stack" in locals():
             log_file_exit_stack.close()
-
-        # the followings only needed when testing the `url` key
-        if "sse_server_process" in locals():
-            sse_server_process.terminate()
-        if "ws_server_process" in locals():
-            ws_server_process.terminate()
 
 
 def main() -> None:
