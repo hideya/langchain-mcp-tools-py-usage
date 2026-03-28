@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/hideya-langchain-mcp-tools-py-usage-badge.png)](https://mseep.ai/app/hideya-langchain-mcp-tools-py-usage)
+
 # MCP Tools Usage From LangChain / Example in Python [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/hideya/langchain-mcp-tools-py-usage/blob/main/LICENSE)
 
 This simple [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
