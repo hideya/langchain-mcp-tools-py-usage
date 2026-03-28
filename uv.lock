@@ -1018,7 +1018,7 @@ wheels = [
 
 [[package]]
 name = "langchain-mcp-tools"
-version = "0.3.2"
+version = "0.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonschema-pydantic" },
@@ -1026,9 +1026,9 @@ dependencies = [
     { name = "langchain-core" },
     { name = "mcp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/46/7f/aa523d8952544489c70e4a4131a2e4a8b3cd1f9f7c06cc1230a235a3dc8d/langchain_mcp_tools-0.3.2.tar.gz", hash = "sha256:a0be3b28bea17bf13260b3da544da9d5554e230739130f1a45905c0df8ec68d5", size = 28202, upload-time = "2026-02-13T06:31:38.987Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/04/e4/668b7cda0109f5325d7f4ea55896ccb70328c4cda52845dfd9278cc8fca2/langchain_mcp_tools-0.3.3.tar.gz", hash = "sha256:1a3b3ce86e4651983508d626c1f2adc80029eb9a66dad32673aa38d5905b8a43", size = 28777, upload-time = "2026-03-28T03:53:37.121Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a8/6d/20e4d46511834f66198519d1582fe79b8e425844a64a5ac73b1009e568dd/langchain_mcp_tools-0.3.2-py3-none-any.whl", hash = "sha256:aff634d4785a5262b0f4de6c3662285e631edf6911c9a786088b133e4c55c423", size = 23856, upload-time = "2026-02-13T06:31:37.472Z" },
+    { url = "https://files.pythonhosted.org/packages/fd/7d/1e093a543925f55f3c0c59a48870c3f216bf8ee559e89bfbd72d445cf211/langchain_mcp_tools-0.3.3-py3-none-any.whl", hash = "sha256:a0f5bd5a95ad0549c4cfdb881be20d4383fcfafa5e674abad1a1a542a3fa41db", size = 24262, upload-time = "2026-03-28T03:53:35.587Z" },
 ]
 
 [[package]]
@@ -1197,7 +1197,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=1.2.9" },
     { name = "langchain-anthropic", specifier = ">=1.3.2" },
     { name = "langchain-google-genai", specifier = ">=4.2.0" },
-    { name = "langchain-mcp-tools", specifier = ">=0.3.2" },
+    { name = "langchain-mcp-tools", specifier = ">=0.3.3" },
     { name = "langchain-openai", specifier = ">=1.1.8" },
     { name = "langchain-xai", specifier = ">=1.2.2" },
 ]

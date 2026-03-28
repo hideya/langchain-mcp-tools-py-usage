@@ -9,7 +9,7 @@ This function handles parallel initialization of specified multiple MCP servers
 and converts their available tools into a list of LangChain-compatible tools
 ([list[BaseTool]](https://python.langchain.com/api_reference/core/tools/langchain_core.tools.base.BaseTool.html#langchain_core.tools.base.BaseTool)).
 
-OpenAI's `gpt-5-mini` is used as the LLM.
+OpenAI's `gpt-5.4-mini` is used as the LLM.
 For convenience, code for Anthropic's, Google GenAI's and xAI's LLMs are also included and commented out.
 
 A bit more realistic (conversational) MCP Client is available
@@ -28,8 +28,9 @@ A typescript equivalent of this MCP client is available
 - LLM API keys from
   [OpenAI](https://platform.openai.com/api-keys),
   [Anthropic](https://console.anthropic.com/settings/keys),
+  [Google GenAI](https://aistudio.google.com/apikey),
   and/or
-  [Google GenAI](https://aistudio.google.com/apikey)
+  [xAI](https://console.x.ai/)
   as needed
 
 ## Usage
@@ -52,3 +53,7 @@ A typescript equivalent of this MCP client is available
     make start
     ```
     It takes a while on the first run.
+
+## License
+
+[MIT](./LICENSE)
