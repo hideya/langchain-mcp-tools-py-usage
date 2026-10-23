@@ -121,7 +121,7 @@ async def run() -> None:
 
         ### https://developers.openai.com/api/docs/pricing
         ### https://platform.openai.com/settings/organization/billing/overview
-        model_name = "openai:gpt-5.4-mini"
+        # model_name = "openai:gpt-5.4-mini"
         # model_name = "openai:gpt-5.2"
 
         ### https://platform.claude.com/docs/en/about-claude/models/overview
@@ -132,7 +132,7 @@ async def run() -> None:
         ### https://ai.google.dev/gemini-api/docs/pricing
         ### https://console.cloud.google.com/billing
         # model_name = "google_genai:gemini-3.1-flash-lite-preview"
-        # model_name = "google_genai:gemini-2.5-flash"
+        model_name = "google_genai:gemini-3.5-flash-lite"
 
         ### https://docs.x.ai/developers/models
         # model_name = "xai:grok-4-1-fast-non-reasoning"
